@@ -2,10 +2,11 @@
 SELECT COUNT(DISTINCT customer_unique_id) AS total_customers
 FROM customers;
 
--- Repeat Customers
+-- Repeat Customers (counted per unique person)
 SELECT
-    customer_id,
-    COUNT(order_id) AS total_orders
-FROM orders
-GROUP BY customer_id
-HAVING COUNT(order_id) > 1;
+    c.customer_unique_id,
+    COUNT(o.order_id) AS total_orders
+FROM customers c
+JOIN orders o ON o.customer_id = c.customer_id
+GROUP BY c.customer_unique_id
+HAVING COUNT(o.order_id) > 1;

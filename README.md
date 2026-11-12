@@ -1,65 +1,22 @@
-# Brazilian E-Commerce SQL Analysis (End-to-End Project)
+# Brazilian E-Commerce SQL Analysis
 
-## 📌 Project Overview
-This project performs an **end-to-end SQL analysis** on the Brazilian E-Commerce (Olist) dataset to extract meaningful business insights related to sales performance, customer behavior, logistics efficiency, seller contribution, payment trends, and customer satisfaction.
+An end-to-end SQL analysis of the Olist Brazilian e-commerce dataset (2016–2018, about 100,000 orders). It covers sales trends, customer repeat behavior, delivery performance and reviews, product categories, sellers, and payments.
 
-The project simulates a **real-world data analyst workflow**, starting from raw data ingestion and schema design to advanced SQL analysis and business insights.
-
----
-
-## 🎯 Business Objectives
-- Analyze overall sales and revenue trends over time  
-- Identify repeat vs one-time customers and customer lifetime value  
-- Evaluate delivery performance and its impact on customer reviews  
-- Determine top-performing product categories and sellers  
-- Understand payment behavior and installment patterns  
-- Apply advanced SQL techniques for deeper analytical insights  
-
----
-
-## 🧰 Tools & Technologies
-- **SQL** (MySQL / PostgreSQL compatible)
-- **Advanced SQL** (CTEs, Window Functions, Ranking, Running Totals)
+## Tools
+- **SQLite** (queries use SQLite date functions)
+- **DB Browser for SQLite** for importing the data and running queries
 - **Git & GitHub** for version control
 
----
+## Dataset
+- **Source:** [Kaggle – Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+- **Raw CSVs are not committed.** Download them and place them in the `data/` folder.
 
-## 🗂️ Dataset Information
-- **Source:** Kaggle – Olist Brazilian E-Commerce Dataset  
-- **Time Period:** 2016 – 2018  
-- **Records:** ~100,000 orders  
-- **Nature:** Real commercial data (anonymized)
-
-📎 Dataset link:  
-https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
-
-> Note: Raw CSV files are not committed to this repository.  
-> Please download the dataset from Kaggle and place all CSV files inside the `data/` folder before running the SQL scripts.
-
----
-
-## 🗃️ Data Model (Tables Used)
-The project uses **9 relational tables**, centered around the `orders` table:
-
-- `customers`
-- `orders`
-- `order_items`
-- `order_payments`
-- `order_reviews`
-- `products`
-- `sellers`
-- `product_category_name_translation`
-- `geolocation` (optional / advanced)
-
----
-
-## 📁 Project Structure
-Brazilian-Ecommerce-SQL-Analysis
-│
-├── data/ # Raw CSV files (not committed)
-├── schema/ # Database & table creation scripts
-│ └── create_tables.sql
-├── analysis/ # SQL analysis scripts
+## Project Structure
+Brazilian-Ecommerce-SQL-Analysis/
+├── data/ # Raw CSVs (not committed)
+├── schema/
+│ └── create_tables.sql # MySQL table definitions (reference only)
+├── analysis/
 │ ├── 01_sales_analysis.sql
 │ ├── 02_customer_analysis.sql
 │ ├── 03_delivery_analysis.sql
@@ -67,53 +24,55 @@ Brazilian-Ecommerce-SQL-Analysis
 │ ├── 05_seller_analysis.sql
 │ ├── 06_payment_analysis.sql
 │ ├── 07_reviews_analysis.sql
-│ └── 08_advanced_sql_analysis.sql
-├── insights/ # Business insights & findings
+│ ├── 08_advanced_sql_analysis.sql
+│ └── 09_customer_checks.sql
+├── insights/
 │ └── business_insights.md
 └── README.md
 
 
+## How to Run (SQLite)
+1. Download the Kaggle dataset and unzip it into `data/`.
+2. In DB Browser for SQLite, create a new database (for example, `data/olist.db`).
+3. Import each CSV with **File → Import → Table from CSV file**. Tick **Column names in first line** and set the table name:
 
----
+   | CSV file | Table name |
+   |---|---|
+   | olist_customers_dataset.csv | customers |
+   | olist_orders_dataset.csv | orders |
+   | olist_order_items_dataset.csv | order_items |
+   | olist_order_payments_dataset.csv | payments |
+   | olist_order_reviews_dataset.csv | reviews |
+   | olist_products_dataset.csv | products |
+   | olist_sellers_dataset.csv | sellers |
+   | product_category_name_translation.csv | category_translation |
 
-## 🔍 Key Analysis Performed
-- Sales & revenue trend analysis  
-- Customer segmentation and repeat purchase analysis  
-- Delivery delay and logistics performance analysis  
-- Product category and seller performance analysis  
-- Payment method and installment behavior analysis  
-- Customer satisfaction and review impact analysis  
+4. Run the queries in `analysis/`. Select one query and press Ctrl+Enter to run just that query.
 
----
+Note: `schema/create_tables.sql` is written for MySQL. For SQLite, use the import steps above instead.
 
-## 🚀 Advanced SQL Techniques Used
-- Common Table Expressions (CTEs)  
-- Window Functions (`RANK`, `AVG() OVER`, `SUM() OVER`)  
-- Running totals & cumulative metrics  
-- Customer Lifetime Value (CLV) calculation  
-- Seller benchmarking against average performance  
-- Pareto (80/20) analysis for revenue contribution  
+## Key Analysis
+- Sales and monthly revenue trends
+- Repeat vs one-time customers and lifetime value (per unique customer)
+- Delivery timeliness and its link to review scores
+- Product category performance (English names, by volume and revenue)
+- Payment methods and installment behavior
+- Seller benchmarking against average revenue
 
----
+## Key Findings
+- **Late deliveries hurt reviews.** About 8% of delivered orders (7,701 of 96,359) arrived after the estimated date. They averaged a 2.57 review score, against 4.29 for on-time orders.
+- **Repeat customers are rare but high-value.** About 3% of customers ordered more than once (2,913 of 95,420 customers with priced orders). They averaged 262.03 in lifetime revenue, against 138.67 for one-time customers.
+- **High-price categories out-earn high-volume ones.** Watches & gifts ranks 7th by items sold but 2nd by revenue, at about 201 per item.
 
-## 📊 Key Business Insights
-- Late deliveries have a strong negative impact on customer ratings  
-- A small percentage of sellers contribute the majority of revenue  
-- Repeat customers generate significantly higher lifetime value  
-- Credit cards are the most preferred payment method  
-- Certain product categories drive high revenue despite lower volume  
+See [`insights/business_insights.md`](insights/business_insights.md) for caveats.
 
----
+## SQL Techniques
+- CTEs (`WITH`)
+- Window functions (`SUM() OVER`, `AVG() OVER`)
+- Running totals
+- Multi-table joins
+- Per-customer aggregation using `customer_unique_id`
 
-## 🧠 What This Project Demonstrates
-- Strong SQL fundamentals and advanced querying skills  
-- Ability to translate raw data into business insights  
-- Experience with real-world, multi-table relational datasets  
-- Industry-oriented project structure and documentation  
-
----
-
-## 👤 Author
-**Syamprasad Bairapuneni**  
-Aspiring Data Analyst | SQL | Data Analytics  
-
+## Author
+**Syamprasad Bairapuneni**
+Aspiring Data Analyst | SQL | Data Analytics

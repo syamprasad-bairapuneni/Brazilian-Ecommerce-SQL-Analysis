@@ -1,17 +1,18 @@
--- Customer Lifetime Value (CLV)
+-- Customer Lifetime Value (CLV) per person
 SELECT
-    o.customer_id,
-    ROUND(SUM(oi.price),2) AS lifetime_value
-FROM orders o
-JOIN order_items oi ON o.order_id = oi.order_id
-GROUP BY o.customer_id
+    c.customer_unique_id,
+    ROUND(SUM(oi.price), 2) AS lifetime_value
+FROM customers c
+JOIN orders o ON o.customer_id = c.customer_id
+JOIN order_items oi ON oi.order_id = o.order_id
+GROUP BY c.customer_unique_id
 ORDER BY lifetime_value DESC;
 
 -- Running Monthly Revenue
 WITH monthly_revenue AS (
     SELECT
-        DATE_FORMAT(order_purchase_timestamp,'%Y-%m') AS month,
-        SUM(price) AS revenue
+        strftime('%Y-%m', o.order_purchase_timestamp) AS month,
+        SUM(oi.price) AS revenue
     FROM orders o
     JOIN order_items oi ON o.order_id = oi.order_id
     GROUP BY month
